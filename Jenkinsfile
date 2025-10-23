@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         IMAGE_NAME = "vjagvi/college-website"
-        ECR_REPO   = "708972351530.dkr.ap-south-1.amazonaws.com/college-website"
+        ECR_REPO   = "708972351530.dkr.ecr.ap-south-1.amazonaws.com/college_website"
         REGION     = "ap-south-1"
         AWS_CLI    = "C:\\Program Files\\Amazon\\AWSCLI\\bin\\aws.exe"
         TERRAFORM  = "C:\\Terraform\\terraform.exe"
