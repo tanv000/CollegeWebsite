@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         IMAGE_NAME = "vjagvi/college-website"
-        ECR_REPO   = "708972351530.dkr.ecr.ap-south-1.amazonaws.com/college_website"
+        ECR_REPO   = "708972351530.dkr.ap-south-1.amazonaws.com/college-website"
         REGION     = "ap-south-1"
         AWS_CLI    = "C:\\Program Files\\Amazon\\AWSCLI\\bin\\aws.exe"
         TERRAFORM  = "C:\\Terraform\\terraform.exe"
@@ -42,7 +42,7 @@ pipeline {
         stage('Deploy with Terraform') {
             steps {
                 echo '🏗️ Deploying EC2 instance and running Docker container...'
-                withCredentials([usernamePassword(credentialsId: 'WEB_APP_HOST_SSH', usernameVariable: 'SSH_KEY_PATH', passwordVariable: 'SSH_USER')]) {
+                withCredentials([usernamePassword(credentialsId: 'aws-ecr-creds', usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY')]) {
                     dir('terraform') {
                         bat """
                         set AWS_ACCESS_KEY_ID=%AWS_ACCESS_KEY_ID%
