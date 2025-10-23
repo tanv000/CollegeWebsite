@@ -1,6 +1,6 @@
 variable "region" {
   description = "AWS region to deploy resources"
-  default     = "us-east-1"
+  default     = "ap-south-1"
 }
 
 variable "instance_type" {
@@ -15,7 +15,7 @@ variable "key_name" {
 
 variable "ecr_repo_url" {
   description = "ECR repository URL of the Docker image"
-  default     = "387056640483.dkr.ecr.us-east-1.amazonaws.com/college-website:latest"
+  default     = "708972351530.dkr.ecr.ap-south-1.amazonaws.com/college_website:latest"
 }
 
 variable "security_group_name" {
