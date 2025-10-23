@@ -42,7 +42,7 @@ pipeline {
         stage('Deploy with Terraform') {
             steps {
                 echo '🏗️ Deploying EC2 instance and running Docker container...'
-                withCredentials([usernamePassword(credentialsId: 'AWS_ECR_CREDENTIALS', usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY')]) {
+                withCredentials([usernamePassword(credentialsId: 'WEB_APP_HOST_SSH', usernameVariable: 'SSH_KEY_PATH', passwordVariable: 'SSH_USER')]) {
                     dir('terraform') {
                         bat """
                         set AWS_ACCESS_KEY_ID=%AWS_ACCESS_KEY_ID%
