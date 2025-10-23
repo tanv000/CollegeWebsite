@@ -101,7 +101,8 @@ resource "aws_instance" "web" {
               #!/bin/bash
               # Update and install Docker
               yum update -y
-              amazon-linux-extras install docker -y
+              # amazon-linux-extras install docker -y
+              yum install -y docker aws-cli
 
               # Enable Docker on boot
               systemctl enable docker
@@ -115,7 +116,7 @@ resource "aws_instance" "web" {
 
               # ECR login, pull image, and run container
               REGION=${var.region}
-              REPO=${var.ecr_repo_url}
+              REPO=708972351530.dkr.ecr.${var.region}.amazonaws.com/college_website
 
               aws ecr get-login-password --region $REGION | docker login --username AWS --password-stdin $REPO
               docker pull $REPO
