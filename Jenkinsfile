@@ -12,21 +12,21 @@ pipeline {
     stages {
         stage('Clone Repository') {
             steps {
-                echo '📦 Cloning repository...'
+                echo 'Cloning repository...'
                 git branch: 'main', url: 'https://github.com/tanv000/CollegeWebsite.git'
             }
         }
 
         stage('Build Docker Image') {
             steps {
-                echo '🐳 Building Docker image...'
+                echo 'Building Docker image...'
                 bat 'docker build -t %IMAGE_NAME%:latest .'
             }
         }
 
         stage('Push to AWS ECR') {
             steps {
-                echo '🚀 Pushing image to AWS ECR...'
+                echo 'Pushing image to AWS ECR...'
                 withCredentials([usernamePassword(credentialsId: 'AWS_ECR_CREDENTIALS', usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY')]) {
                     bat """
                     set AWS_ACCESS_KEY_ID=%AWS_ACCESS_KEY_ID%
@@ -41,7 +41,7 @@ pipeline {
 
         stage('Deploy with Terraform') {
             steps {
-                echo '🏗️ Deploying EC2 instance and running Docker container...'
+                echo 'Deploying EC2 instance and running Docker container...'
                 withCredentials([usernamePassword(credentialsId: 'AWS_ECR_CREDENTIALS', usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY')]) {
                     dir('terraform') {
                         bat """
@@ -55,16 +55,33 @@ pipeline {
             }
         }
 
-        
+        stage('Fetch EC2 Public IP') {
+            steps {
+                echo 'Fetching EC2 public IP...'
+                withCredentials([usernamePassword(credentialsId: 'AWS_ECR_CREDENTIALS', usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY')]) {
+                    dir('terraform') {
+                        script {
+                            def ec2_ip = bat(script: """
+                                set AWS_ACCESS_KEY_ID=%AWS_ACCESS_KEY_ID%
+                                set AWS_SECRET_ACCESS_KEY=%AWS_SECRET_ACCESS_KEY%
+                                "%AWS_CLI%" ec2 describe-instances --region %REGION% --filters "Name=tag:Name,Values=CollegeWebsite-EC2" "Name=instance-state-name,Values=running" --query "Reservations[*].Instances[*].PublicIpAddress" --output text
+                                """, returnStdout: true).trim()
+                            
+                            echo "EC2 Public IP: ${ec2_ip}"
+                            echo "Visit your website at: http://${ec2_ip}"
+                        }
+                    }
+                }
+            }
+        }
     }
 
     post {
         success {
-            echo '✅ Docker image pushed, EC2 deployed, and website is running!'
-            echo '🎉 Open the site in your browser using the EC2 Public IP or DNS.'
+            echo 'Deployment successful. Your College Website is live!'
         }
         failure {
-            echo '❌ Build or deployment failed!'
+            echo 'Build or deployment failed!'
         }
     }
 }
