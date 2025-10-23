@@ -3,17 +3,17 @@ pipeline {
 
     environment {
         IMAGE_NAME = "vjagvi/college-website"
-        ECR_REPO   = "387056640483.dkr.ecr.us-east-1.amazonaws.com/college-website"
-        REGION     = "us-east-1"
-        AWS_CLI    = "C:\\Program Files\\Amazon\\AWSCLIV2\\aws.exe"
-        TERRAFORM  = "C:\\terraform_1.13.3_windows_386\\terraform.exe"
+        ECR_REPO   = "708972351530.dkr.ap-south-1.amazonaws.com/college-website"
+        REGION     = "ap-south-1"
+        AWS_CLI    = "C:\Program Files\Amazon\AWSCLI\bin\aws.exe"
+        TERRAFORM  = "C:\Terraform\terraform.exe"
     }
 
     stages {
         stage('Clone Repository') {
             steps {
                 echo '📦 Cloning repository...'
-                git branch: 'main', url: 'https://github.com/vJagvi/CollegeWebsite.git'
+                git branch: 'main', url: 'https://github.com/tanv000/CollegeWebsite.git'
             }
         }
 
