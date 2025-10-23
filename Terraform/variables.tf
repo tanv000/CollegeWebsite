@@ -10,7 +10,7 @@ variable "instance_type" {
 
 variable "key_name" {
   description = "Existing EC2 key pair name"
-  default     = "my-keypair"
+  default     = "jenkins-pipeline-key"
 }
 
 variable "ecr_repo_url" {
