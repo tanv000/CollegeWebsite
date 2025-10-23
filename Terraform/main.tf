@@ -112,7 +112,7 @@ resource "aws_instance" "web" {
               usermod -a -G docker ec2-user
 
               # Wait for Docker to start
-              sleep 10
+              sleep 30
 
               # ECR login, pull image, and run container
               REGION=${var.region}
